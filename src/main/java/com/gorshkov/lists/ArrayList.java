@@ -1,5 +1,7 @@
 package com.gorshkov.lists;
 
+import java.util.Objects;
+
 public class ArrayList implements List {
     private final int INITIAL_CAPACITY = 4;
 
@@ -81,7 +83,7 @@ public class ArrayList implements List {
     @Override
     public boolean contains(Object value) {
         for (int i = 0; i < size; i++) {
-            if (values[i].equals(value)) {
+            if (Objects.equals(values[i], value)) {
                 return true;
             }
         }
@@ -91,7 +93,7 @@ public class ArrayList implements List {
     @Override
     public int indexOf(Object value) {
         for (int i = 0; i < size; i++) {
-            if (values[i].equals(value)) {
+            if (Objects.equals(values[i], value)) {
                 return i;
             }
         }
@@ -101,7 +103,7 @@ public class ArrayList implements List {
     @Override
     public int lastIndexOf(Object value) {
         for (int i = size - 1; i >= 0; i--) {
-            if (values[i].equals(value)) {
+            if (Objects.equals(values[i], value)) {
                 return i;
             }
         }
