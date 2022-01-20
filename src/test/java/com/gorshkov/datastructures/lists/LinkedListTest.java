@@ -53,7 +53,7 @@ class LinkedListTest {
 
         list.remove(1);
 
-        assertEquals(4, list.size);
+        assertEquals(4, list.size());
         assertEquals("two", list.get(1));
     }
 

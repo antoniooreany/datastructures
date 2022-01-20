@@ -2,9 +2,9 @@ package com.gorshkov.datastructures.lists;
 
 public class LinkedList implements List {
 
-    public Node first;
-    public Node last;
-    public int size;
+    private Node first;
+    private Node last;
+    private int size;
 
     static class Node {
         Object value;
