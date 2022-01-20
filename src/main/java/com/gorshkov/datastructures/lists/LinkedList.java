@@ -1,4 +1,4 @@
-package com.gorshkov.lists;
+package com.gorshkov.datastructures.lists;
 
 public class LinkedList implements List {
 

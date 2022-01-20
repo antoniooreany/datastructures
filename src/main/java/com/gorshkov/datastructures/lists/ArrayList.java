@@ -1,4 +1,4 @@
-package com.gorshkov.lists;
+package com.gorshkov.datastructures.lists;
 
 import java.util.Objects;
 

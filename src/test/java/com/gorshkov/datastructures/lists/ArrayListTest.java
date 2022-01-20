@@ -1,4 +1,4 @@
-package com.gorshkov.lists;
+package com.gorshkov.datastructures.lists;
 
 import static org.junit.jupiter.api.Assertions.*;
 
