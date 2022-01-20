@@ -26,7 +26,7 @@ public class ArrayList implements List {
 
     @Override
     public void add(Object value, int index) {
-        if (index <= 0 || index > size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         } else {
             values[index] = value;
@@ -36,7 +36,7 @@ public class ArrayList implements List {
     @Override
     public Object remove(int index) {
         Object result = values[index];
-        if (index <= 0 || index > size - 1) {
+        if (index < 0 || index > size - 1) {
             throw new IndexOutOfBoundsException();
         } else {
             Object[] tmp = values;
@@ -57,7 +57,7 @@ public class ArrayList implements List {
     @Override
     public Object set(Object value, int index) {
         Object previousValue = values[index];
-        if (index <= 0 || index > size - 1) {
+        if (index < 0 || index > size - 1) {
             throw new IndexOutOfBoundsException();
         } else {
             values[index] = value;

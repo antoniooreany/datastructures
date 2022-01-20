@@ -30,7 +30,9 @@ public class LinkedList implements List {
 
     @Override
     public void add(Object value, int index) {
-        if (index > 0 || index < size) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        } else {
             Node current = first;
             for (int i = 0; i < index; i++) {
                 current = current.next;
@@ -38,19 +40,23 @@ public class LinkedList implements List {
             current = new Node(value, current.next);
             Node tmp = current.next;
             // TODO change the implementation to work correctly
-        } else throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override
     public Object remove(int index) {
         Node current;
-        if (index > 0 || index < size) {
-            current = first;
-            for (int i = 0; i < index; i++) {
+        Node prev;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        } else {
+            current = first.next;
+            prev = first;
+            for (int i = 0; i < index - 1; i++) {
                 current = current.next;
             }
-            current = current.next;
-        } else throw new IndexOutOfBoundsException();
+            prev.next = current.next;
+        }
         size--;
         return current.value;
     }
@@ -58,32 +64,38 @@ public class LinkedList implements List {
     @Override
     public Object get(int index) {
         Node current;
-        if (index > 0 || index < size) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        } else {
             current = first;
             for (int i = 0; i < index; i++) {
                 current = current.next;
             }
             return current.value;
-        } else throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override
     public Object set(Object value, int index) {
         Node current;
-        if (index > 0 || index < size) {
+        Node prev = null;
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        } else {
             current = first;
             for (int i = 0; i < index; i++) {
                 current = current.next;
             }
-            current = new Node(value, current.next);
+            current.next = new Node(value, current.next); //TODO Make it set to the previous place
+            size++;
             return current.value;
-        } else throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override
     public void clear() {
         first = null;
-        last = first;
+        last = null;
         size = 0;
     }
 
@@ -121,6 +133,6 @@ public class LinkedList implements List {
 
     @Override
     public int lastIndexOf(Object value) {
-        return 0;
+        return 0; //TODO implement it
     }
 }
