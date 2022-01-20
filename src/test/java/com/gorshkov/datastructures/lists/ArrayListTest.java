@@ -25,6 +25,7 @@ class ArrayListTest {
         assertEquals("three", list.get(2));
         assertEquals("four", list.get(3));
         assertEquals("five", list.get(4));
+
     }
 
     @Test
@@ -92,5 +93,18 @@ class ArrayListTest {
     @Test
     void toStringTest() {
         assertEquals("[one, two, three, four, five]", list.toString());
+    }
+
+    @Test
+    void iteratorTest() {
+
+        System.out.println(list.iterator().hasNext());
+        System.out.println(list.iterator().hasNext());
+        System.out.println(list.iterator().hasNext());
+        System.out.println(list.iterator().hasNext());
+        System.out.println(list.iterator().hasNext());
+        System.out.println(list.iterator().hasNext());
+        System.out.println(list.iterator().hasNext());
+        System.out.println(list.iterator().hasNext());
     }
 }

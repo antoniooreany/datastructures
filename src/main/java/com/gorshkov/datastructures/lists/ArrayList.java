@@ -1,8 +1,9 @@
 package com.gorshkov.datastructures.lists;
 
+import java.util.Iterator;
 import java.util.Objects;
 
-public class ArrayList implements List {
+public class ArrayList implements List, Iterable {
     private final int INITIAL_CAPACITY = 4;
 
     private Object[] values;
@@ -119,5 +120,29 @@ public class ArrayList implements List {
         }
         builder.append("]");
         return builder.toString();
+    }
+
+    @Override
+    public Iterator iterator() {
+
+        return new Iterator() {
+            Object cursor = values[0];
+            static int index;
+
+            @Override
+            public boolean hasNext() {
+                return next() != null;
+            }
+
+            @Override
+            public Object next() {
+                return values[index++];
+            }
+
+            @Override
+            public void remove() {
+                //TODO implement it
+            }
+        };
     }
 }

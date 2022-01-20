@@ -1,21 +1,23 @@
 package com.gorshkov.datastructures.lists;
 
-public class LinkedList implements List {
+import java.util.Iterator;
+
+public class LinkedList implements List, Iterable {
 
     private Node first;
     private Node last;
     private int size;
 
     static class Node {
+
         Object value;
         Node next;
-
         public Node(Object value, Node next) {
             this.value = value;
             this.next = next;
         }
-    }
 
+    }
     @Override
     public void add(Object value) {
         if (last != null) {
@@ -30,15 +32,15 @@ public class LinkedList implements List {
 
     @Override
     public void add(Object value, int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         } else {
             Node current = first;
             for (int i = 0; i < index; i++) {
                 current = current.next;
             }
+
             current = new Node(value, current.next);
-            Node tmp = current.next;
             // TODO change the implementation to work correctly
         }
     }
@@ -78,16 +80,15 @@ public class LinkedList implements List {
     @Override
     public Object set(Object value, int index) {
         Node current;
-        Node prev = null;
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         } else {
             current = first;
-            for (int i = 0; i < index; i++) {
+            for (int i = 0; i < index - 1; i++) {
                 current = current.next;
             }
-            current.next = new Node(value, current.next); //TODO Make it set to the previous place
-            size++;
+            current.next = new Node(value, current.next);
+            size++; //TODO Make it to set, not to push
             return current.value;
         }
     }
@@ -134,5 +135,29 @@ public class LinkedList implements List {
     @Override
     public int lastIndexOf(Object value) {
         return 0; //TODO implement it
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+            Node cursor = first;
+
+            @Override
+            public boolean hasNext() {
+                cursor = cursor.next;
+                return cursor == null;
+            }
+
+            @Override
+            public Object next() {
+                cursor = cursor.next;
+                return cursor;
+            }
+
+            @Override
+            public void remove() {
+                //TODO implement it
+            }
+        };
     }
 }
