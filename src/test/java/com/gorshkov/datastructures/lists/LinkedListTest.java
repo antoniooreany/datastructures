@@ -16,71 +16,71 @@ class LinkedListTest {
 
     @Test
     void add() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
-        assertEquals("zero", list.get(0));
-        assertEquals("one", list.get(1));
-        assertEquals("two", list.get(2));
-        assertEquals("three", list.get(3));
-        assertEquals("four", list.get(4));
+        assertEquals("one", list.get(0));
+        assertEquals("two", list.get(1));
+        assertEquals("three", list.get(2));
+        assertEquals("four", list.get(3));
+        assertEquals("five", list.get(4));
     }
 
     @Test
     void testAdd() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
-        list.add("Two", 2);
+        list.add("Two", 1);
 
-        assertEquals("Two", list.get(2));
+        assertEquals("Two", list.get(1));
 
     }
 
     @Test
     void remove() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
         list.remove(1);
 
         assertEquals(4, list.size());
-        assertEquals("two", list.get(1));
+        assertEquals("three", list.get(1));
     }
 
     @Test
     void get() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
-        assertEquals("zero", list.get(0));
-        assertEquals("one", list.get(1));
-        assertEquals("two", list.get(2));
-        assertEquals("three", list.get(3));
-        assertEquals("four", list.get(4));
+        assertEquals("one", list.get(0));
+        assertEquals("two", list.get(1));
+        assertEquals("three", list.get(2));
+        assertEquals("four", list.get(3));
+        assertEquals("five", list.get(4));
     }
 
     @Test
     void set() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
-        list.set("Two", 2);
+        list.set("Two", 1);
 
         for (int i = 0; i < 6; i++) {
             System.out.println(list.get(i));
@@ -89,11 +89,11 @@ class LinkedListTest {
 
     @Test
     void clear() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
         list.clear();
 
@@ -102,33 +102,33 @@ class LinkedListTest {
 
     @Test
     void size() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
         assertEquals(5, list.size());
     }
 
     @Test
     void isEmpty() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
         assertFalse(list.isEmpty());
     }
 
     @Test
     void contains() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
         assertFalse(list.contains("test"));
         assertTrue(list.contains("two"));
@@ -136,25 +136,35 @@ class LinkedListTest {
 
     @Test
     void indexOf() {
-        list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
+        list.add("five");
 
-        assertEquals(2, list.indexOf("two"));
+        assertEquals(1, list.indexOf("two"));
     }
 
     @Test
     void lastIndexOf() {
+        list.add("one");
+        list.add("two");
+        list.add("three");
+        list.add("four");
+        list.add("five");
+
+        list.add("two");
+
+        assertEquals(5, list.lastIndexOf("two"));
+    }
+
+    @Test
+    void toStringTest() {
         list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
-
-        list.add("two");
-
-        assertEquals(5, list.lastIndexOf("two"));
+        assertEquals("[zero, one, two, three, four]", list.toString());
     }
 }

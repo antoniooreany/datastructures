@@ -2,26 +2,28 @@ package com.gorshkov.datastructures.lists;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.StringJoiner;
 
-public class ArrayList implements List, Iterable {
+public class ArrayList<V> implements List, Iterable {
     private final int INITIAL_CAPACITY = 4;
 
-    private Object[] values;
+    private V[] values;
     private int capacity = INITIAL_CAPACITY;
     private int size = 0;
 
     public ArrayList() {
-        this.values = new Object[capacity];
+        this.values = (V[]) new Object[capacity];
     }
 
+    @Override
     public void add(Object value) {
         if (size >= capacity) {
             capacity *= 2;
             Object[] tmp = values;
-            values = new Object[capacity];
+            values = (V[]) new Object[capacity];
             System.arraycopy(tmp, 0, values, 0, capacity / 2);
         }
-        values[size] = value;
+        values[size] = (V) value;
         size++;
     }
 
@@ -30,17 +32,17 @@ public class ArrayList implements List, Iterable {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         } else {
-            values[index] = value;
+            values[index] = (V) value;
         }
     }
 
     @Override
-    public Object remove(int index) {
-        Object result = values[index];
+    public V remove(int index) {
+        V result = values[index];
         if (index < 0 || index > size - 1) {
             throw new IndexOutOfBoundsException();
         } else {
-            Object[] tmp = values;
+            V[] tmp = values;
             System.arraycopy(tmp, 0, values, 0, index);
             System.arraycopy(tmp, index + 1, values, index, size - 1);
             values[size] = null;
@@ -49,26 +51,26 @@ public class ArrayList implements List, Iterable {
     }
 
     @Override
-    public Object get(int index) {
+    public V get(int index) {
         if (index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else return values[index];
     }
 
     @Override
-    public Object set(Object value, int index) {
-        Object previousValue = values[index];
+    public V set(Object value, int index) {
+        V previousValue = values[index];
         if (index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
-            values[index] = value;
+            values[index] = (V) value;
             return previousValue;
         }
     }
 
     @Override
     public void clear() {
-        values = new Object[capacity];
+        values = (V[]) new Object[capacity];
     }
 
     @Override
@@ -113,20 +115,18 @@ public class ArrayList implements List, Iterable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("[");
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
         for (int i = 0; i < size; i++) {
-            builder.append(values[i]);
-            if (i < size - 1) builder.append(", ");
+            joiner.add((CharSequence) values[i]);
         }
-        builder.append("]");
-        return builder.toString();
+        return joiner.toString();
     }
 
     @Override
     public Iterator iterator() {
 
         return new Iterator() {
-            Object cursor = values[0];
+            V cursor = values[0];
             static int index;
 
             @Override
@@ -135,13 +135,14 @@ public class ArrayList implements List, Iterable {
             }
 
             @Override
-            public Object next() {
+            public V next() {
                 return values[index++];
             }
 
             @Override
             public void remove() {
-                //TODO implement it
+                Iterator.super.remove();
+                //TODO implement it: remove cursor
             }
         };
     }

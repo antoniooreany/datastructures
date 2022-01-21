@@ -1,18 +1,19 @@
 package com.gorshkov.datastructures.lists;
 
 import java.util.Iterator;
+import java.util.StringJoiner;
 
-public class LinkedList implements List, Iterable {
+public class LinkedList<V> implements List, Iterable {
 
-    private Node first;
-    private Node last;
+    private Node<V> first;
+    private Node<V> last;
     private int size;
 
-    static class Node {
+    static class Node<V> {
 
-        Object value;
-        Node next;
-        public Node(Object value, Node next) {
+        V value;
+        Node<V> next;
+        public Node(V value, Node<V> next) {
             this.value = value;
             this.next = next;
         }
@@ -21,10 +22,10 @@ public class LinkedList implements List, Iterable {
     @Override
     public void add(Object value) {
         if (last != null) {
-            last.next = new Node(value, null);
+            last.next = new Node<V>((V) value, null);
             last = last.next;
         } else {
-            first = new Node(value, null);
+            first = new Node<V>((V) value, null);
             last = first;
         }
         size++;
@@ -35,20 +36,20 @@ public class LinkedList implements List, Iterable {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         } else {
-            Node current = first;
+            Node<V> current = first;
             for (int i = 0; i < index; i++) {
                 current = current.next;
             }
 
-            current = new Node(value, current.next);
+            current = new Node<V>((V) value, current.next);
             // TODO change the implementation to work correctly
         }
     }
 
     @Override
-    public Object remove(int index) {
-        Node current;
-        Node prev;
+    public V remove(int index) {
+        Node<V> current;
+        Node<V> prev;
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         } else {
@@ -64,8 +65,8 @@ public class LinkedList implements List, Iterable {
     }
 
     @Override
-    public Object get(int index) {
-        Node current;
+    public V get(int index) {
+        Node<V> current;
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         } else {
@@ -78,8 +79,8 @@ public class LinkedList implements List, Iterable {
     }
 
     @Override
-    public Object set(Object value, int index) {
-        Node current;
+    public V set(Object value, int index) {
+        Node<V> current;
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         } else {
@@ -87,7 +88,7 @@ public class LinkedList implements List, Iterable {
             for (int i = 0; i < index - 1; i++) {
                 current = current.next;
             }
-            current.next = new Node(value, current.next);
+            current.next = new Node<V>((V) value, current.next);
             size++; //TODO Make it to set, not to push
             return current.value;
         }
@@ -112,7 +113,7 @@ public class LinkedList implements List, Iterable {
 
     @Override
     public boolean contains(Object value) {
-        Node current = first;
+        Node<V> current = first;
         while (current != null) {
             if (current.value.equals(value)) return true;
             current = current.next;
@@ -123,7 +124,7 @@ public class LinkedList implements List, Iterable {
     @Override
     public int indexOf(Object value) {
         int result = 0;
-        Node current = first;
+        Node<V> current = first;
         while (current != null) {
             if (current.value.equals(value)) return result;
             result++;
@@ -138,9 +139,20 @@ public class LinkedList implements List, Iterable {
     }
 
     @Override
-    public Iterator iterator() {
-        return new Iterator() {
-            Node cursor = first;
+    public String toString() {
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        Node<V> cursor = first;
+        for (int i = 0; i < size; i++) {
+            joiner.add((CharSequence) cursor.value);
+            cursor = cursor.next;
+        }
+        return joiner.toString();
+    }
+
+    @Override
+    public Iterator<V> iterator() {
+        return new Iterator<V>() {
+            Node<V> cursor = first;
 
             @Override
             public boolean hasNext() {
@@ -149,14 +161,15 @@ public class LinkedList implements List, Iterable {
             }
 
             @Override
-            public Object next() {
+            public V next() {
                 cursor = cursor.next;
-                return cursor;
+                return (V) cursor;
             }
 
             @Override
             public void remove() {
-                //TODO implement it
+                Iterator.super.remove();
+                //TODO implement it: remove cursor
             }
         };
     }
