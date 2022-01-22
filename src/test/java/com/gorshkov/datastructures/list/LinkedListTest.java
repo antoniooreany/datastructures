@@ -1,4 +1,4 @@
-package com.gorshkov.datastructures.lists;
+package com.gorshkov.datastructures.list;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

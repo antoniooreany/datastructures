@@ -1,4 +1,4 @@
-package com.gorshkov.datastructures.lists;
+package com.gorshkov.datastructures.list;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public class ArrayList<V> implements List, Iterable {
     @Override
     public void add(Object value, int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
             values[index] = (V) value;
         }
@@ -40,7 +40,7 @@ public class ArrayList<V> implements List, Iterable {
     public V remove(int index) {
         V result = values[index];
         if (index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
             V[] tmp = values;
             System.arraycopy(tmp, 0, values, 0, index);
@@ -126,8 +126,8 @@ public class ArrayList<V> implements List, Iterable {
     public Iterator iterator() {
 
         return new Iterator() {
-            V cursor = values[0];
             static int index;
+            final V cursor = values[0];
 
             @Override
             public boolean hasNext() {
@@ -141,8 +141,7 @@ public class ArrayList<V> implements List, Iterable {
 
             @Override
             public void remove() {
-                Iterator.super.remove();
-                //TODO implement it: remove cursor
+                index++;
             }
         };
     }

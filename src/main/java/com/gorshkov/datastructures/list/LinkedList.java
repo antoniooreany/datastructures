@@ -1,4 +1,4 @@
-package com.gorshkov.datastructures.lists;
+package com.gorshkov.datastructures.list;
 
 import java.util.Iterator;
 import java.util.StringJoiner;
@@ -9,16 +9,6 @@ public class LinkedList<V> implements List, Iterable {
     private Node<V> last;
     private int size;
 
-    static class Node<V> {
-
-        V value;
-        Node<V> next;
-        public Node(V value, Node<V> next) {
-            this.value = value;
-            this.next = next;
-        }
-
-    }
     @Override
     public void add(Object value) {
         if (last != null) {
@@ -34,7 +24,7 @@ public class LinkedList<V> implements List, Iterable {
     @Override
     public void add(Object value, int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
             Node<V> current = first;
             for (int i = 0; i < index; i++) {
@@ -51,7 +41,7 @@ public class LinkedList<V> implements List, Iterable {
         Node<V> current;
         Node<V> prev;
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
             current = first.next;
             prev = first;
@@ -68,7 +58,7 @@ public class LinkedList<V> implements List, Iterable {
     public V get(int index) {
         Node<V> current;
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
             current = first;
             for (int i = 0; i < index; i++) {
@@ -82,7 +72,7 @@ public class LinkedList<V> implements List, Iterable {
     public V set(Object value, int index) {
         Node<V> current;
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
             current = first;
             for (int i = 0; i < index - 1; i++) {
@@ -168,9 +158,18 @@ public class LinkedList<V> implements List, Iterable {
 
             @Override
             public void remove() {
-                Iterator.super.remove();
-                //TODO implement it: remove cursor
+                cursor = cursor.next;
             }
         };
+    }
+
+    static class Node<V> {
+        V value;
+        Node<V> next;
+
+        public Node(V value, Node<V> next) {
+            this.value = value;
+            this.next = next;
+        }
     }
 }

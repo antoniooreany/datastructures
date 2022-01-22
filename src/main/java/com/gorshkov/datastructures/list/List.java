@@ -1,4 +1,4 @@
-package com.gorshkov.datastructures.lists;
+package com.gorshkov.datastructures.list;
 
 // Abstract Data Type
 public interface List<V> {

@@ -1,4 +1,4 @@
-package com.gorshkov.datastructures.lists;
+package com.gorshkov.datastructures.list;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class ArrayListTest {
 
-    ArrayList list = new ArrayList();
+    ArrayList<String> list = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -97,14 +97,8 @@ class ArrayListTest {
 
     @Test
     void iteratorTest() {
-
-        System.out.println(list.iterator().hasNext());
-        System.out.println(list.iterator().hasNext());
-        System.out.println(list.iterator().hasNext());
-        System.out.println(list.iterator().hasNext());
-        System.out.println(list.iterator().hasNext());
-        System.out.println(list.iterator().hasNext());
-        System.out.println(list.iterator().hasNext());
-        System.out.println(list.iterator().hasNext());
+        for (Object o : list) {
+            System.out.println(o);
+        }
     }
 }
