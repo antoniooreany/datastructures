@@ -4,11 +4,12 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList<V> implements List<V>, Iterable<V> {
+public class LinkedList<V> implements List<V> {
 
     static class Node<V> {
         V value;
         Node<V> next;
+
         public Node(V value) {
             this.value = value;
         }
@@ -166,17 +167,19 @@ public class LinkedList<V> implements List<V>, Iterable<V> {
     public Iterator<V> iterator() {
         return new Iterator<>() {
             Node<V> cursor = first;
+            int index;
 
             @Override
             public boolean hasNext() {
-                cursor = cursor.next;
-                return cursor == null;
+                return index < size;
             }
 
             @Override
             public V next() {
+                Node<V> tmpNode = cursor;
+                index++;
                 cursor = cursor.next;
-                return cursor.value;
+                return tmpNode.value;
             }
 
             @Override

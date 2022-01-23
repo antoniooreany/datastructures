@@ -1,7 +1,9 @@
 package com.gorshkov.datastructures.list;
 
+import java.util.Iterator;
+
 // Abstract Data Type
-public interface List<V> {
+public interface List<V> extends Iterable {
     // add value to the end of the list
     void add(V value);
 
@@ -44,6 +46,8 @@ public interface List<V> {
 
     // [A, B, C]
     String toString();
+
+    Iterator<V> iterator();
 }
 
 

@@ -3,6 +3,8 @@ package com.gorshkov.datastructures.list;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class ListTest<V> {
@@ -93,5 +95,38 @@ public abstract class ListTest<V> {
     @Test
     void toStringTest() {
         assertEquals("[one, two, three, four, five]", list.toString());
+    }
+
+    @Test
+    void hasNextIteratorTest() {
+        Iterator<V> iterator = list.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals("one", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("two", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("three", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("four", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("five", iterator.next());
+    }
+
+    @Test
+    void nextIteratorTest() {
+        Iterator<V> iterator = list.iterator();
+        for (int i = 0; i < list.size(); i++) {
+            iterator.next();
+        }
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void removeIteratorTest() {
+        Iterator<V> iterator = list.iterator();
+        iterator.remove();
+
+        assertEquals("two", iterator.next());
     }
 }

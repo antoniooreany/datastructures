@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class ArrayList<V> implements List<V>, Iterable<V> {
+public class ArrayList<V> implements List<V> {
     private final int INITIAL_CAPACITY = 4;
     private final double LOAD_FACTOR = 1.5;
 
@@ -18,15 +18,6 @@ public class ArrayList<V> implements List<V>, Iterable<V> {
 
     @Override
     public void add(V value) {
-//        if (size >= capacity) {
-//            capacity *= LOAD_FACTOR;
-//            Object[] tmp = values;
-//            values = (V[]) new Object[capacity];
-//            System.arraycopy(tmp, 0, values, 0, capacity / 2);
-//        }
-//        values[size] = value;
-//        size++;
-
         if (values.length >= size) {
             increaseSize();
         }
@@ -144,12 +135,12 @@ public class ArrayList<V> implements List<V>, Iterable<V> {
 
             @Override
             public V next() {
-                return values[++index];
+                return values[index++];
             }
 
             @Override
             public void remove() {
-                ArrayList.this.remove(index - 1);
+                index++;
             }
         };
     }
@@ -158,6 +149,5 @@ public class ArrayList<V> implements List<V>, Iterable<V> {
         V[] tmpValues = (V[]) new Object[(int) (values.length * LOAD_FACTOR)];
         System.arraycopy(values, 0, tmpValues, 0, size);
         values = tmpValues;
-
     }
 }

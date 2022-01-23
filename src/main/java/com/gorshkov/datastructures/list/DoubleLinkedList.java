@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class DoubleLinkedList<V> implements List<V>, Iterable<V> {
+public class DoubleLinkedList<V> implements List<V> {
 
     private Node<V> first;
     private Node<V> last;
