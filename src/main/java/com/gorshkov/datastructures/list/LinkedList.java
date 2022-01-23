@@ -1,88 +1,103 @@
 package com.gorshkov.datastructures.list;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList<V> implements List, Iterable {
+public class LinkedList<V> implements List<V>, Iterable<V> {
+
+    static class Node<V> {
+        V value;
+        Node<V> next;
+        public Node(V value) {
+            this.value = value;
+        }
+    }
 
     private Node<V> first;
     private Node<V> last;
     private int size;
 
     @Override
-    public void add(Object value) {
-        if (last != null) {
-            last.next = new Node<V>((V) value, null);
-            last = last.next;
+    public void add(V value) {
+        Node<V> newNode = new Node<>(value);
+        if (first == null) {
+            first = last = newNode;
         } else {
-            first = new Node<V>((V) value, null);
-            last = first;
+            this.last.next = newNode;
+            last = newNode;
         }
         size++;
     }
 
     @Override
-    public void add(Object value, int index) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
-        } else {
-            Node<V> current = first;
-            for (int i = 0; i < index; i++) {
-                current = current.next;
-            }
-
-            current = new Node<V>((V) value, current.next);
-            // TODO change the implementation to work correctly
+    public void add(V value, int index) {
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is less than zero");
         }
+        if (index >= size - 1) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is is larger than size");
+        }
+        Node<V> newNode = new Node<>(value);
+        if (first == null) {
+            first = last = newNode;
+        } else if (index == 0) {
+            newNode.next = first;
+            first = newNode;
+        } else if (index == size) {
+            last.next = newNode;
+            last = newNode;
+        } else {
+            Node<V> cursor = getNode(index - 1);
+            newNode.next = cursor.next;
+            cursor.next = newNode;
+        }
+        size++;
     }
 
     @Override
     public V remove(int index) {
-        Node<V> current;
+        Node<V> cursor;
         Node<V> prev;
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
-            current = first.next;
+            cursor = first.next;
             prev = first;
             for (int i = 0; i < index - 1; i++) {
-                current = current.next;
+                cursor = cursor.next;
             }
-            prev.next = current.next;
+            prev.next = cursor.next;
         }
         size--;
-        return current.value;
+        return cursor.value;
     }
 
     @Override
     public V get(int index) {
-        Node<V> current;
+        Node<V> cursor;
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
-            current = first;
+            cursor = first;
             for (int i = 0; i < index; i++) {
-                current = current.next;
+                cursor = cursor.next;
             }
-            return current.value;
+            return cursor.value;
         }
     }
 
     @Override
-    public V set(Object value, int index) {
-        Node<V> current;
-        if (index < 0 || index > size) {
+    public V set(V value, int index) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
-        } else {
-            current = first;
-            for (int i = 0; i < index - 1; i++) {
-                current = current.next;
-            }
-            current.next = new Node<V>((V) value, current.next);
-            size++; //TODO Make it to set, not to push
-            return current.value;
         }
+        Node<V> node = getNode(index);
+        V prevValue = node.value;
+        node.value = value;
+        return prevValue;
     }
+
 
     @Override
     public void clear() {
@@ -102,7 +117,7 @@ public class LinkedList<V> implements List, Iterable {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(V value) {
         Node<V> current = first;
         while (current != null) {
             if (current.value.equals(value)) return true;
@@ -112,20 +127,28 @@ public class LinkedList<V> implements List, Iterable {
     }
 
     @Override
-    public int indexOf(Object value) {
-        int result = 0;
-        Node<V> current = first;
-        while (current != null) {
-            if (current.value.equals(value)) return result;
-            result++;
-            current = current.next;
+    public int indexOf(V value) {
+        Node<V> cursor = first;
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(cursor.value, value)) {
+                return i;
+            }
+            cursor = cursor.next;
         }
         return -1;
     }
 
     @Override
-    public int lastIndexOf(Object value) {
-        return 0; //TODO implement it
+    public int lastIndexOf(V value) {
+        int result = -1;
+        Node<V> cursor = first;
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(cursor.value, value)) {
+                result = i;
+            }
+            cursor = cursor.next;
+        }
+        return result;
     }
 
     @Override
@@ -141,7 +164,7 @@ public class LinkedList<V> implements List, Iterable {
 
     @Override
     public Iterator<V> iterator() {
-        return new Iterator<V>() {
+        return new Iterator<>() {
             Node<V> cursor = first;
 
             @Override
@@ -153,7 +176,7 @@ public class LinkedList<V> implements List, Iterable {
             @Override
             public V next() {
                 cursor = cursor.next;
-                return (V) cursor;
+                return cursor.value;
             }
 
             @Override
@@ -163,13 +186,11 @@ public class LinkedList<V> implements List, Iterable {
         };
     }
 
-    static class Node<V> {
-        V value;
-        Node<V> next;
-
-        public Node(V value, Node<V> next) {
-            this.value = value;
-            this.next = next;
+    private Node<V> getNode(int index) {
+        Node<V> cursor = first;
+        for (int i = 0; i < index; i++) {
+            cursor = cursor.next;
         }
+        return cursor;
     }
 }

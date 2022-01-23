@@ -4,41 +4,39 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class DoubleLinkedList<V> implements List, Iterable {
+public class DoubleLinkedList<V> implements List<V>, Iterable<V> {
 
     private Node<V> first;
     private Node<V> last;
     private int size;
 
     @Override
-    public void add(Object value) {
+    public void add(V value) {
         add(value, size);
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(V value, int index) {
         if (index > size) {
             throw new IllegalArgumentException("index = " + index + ", larger than size = " + size);
         }
         Node<V> cursor = getNode(index);
         if (cursor == null) {
-            first = new Node<V>(null, (V) value, null);
+            first = new Node<V>(null, value, null);
         } else if (cursor.prev == null && cursor.next == null) {
-            Node<V> newNode = new Node<V>(null, (V) value, cursor);
+            Node<V> newNode = new Node<>(null, value, cursor);
             newNode.prev.next = newNode;
             first = newNode;
-        } else if (cursor.next == null) {
-            Node<V> newNode = new Node<V>(null, (V) value, cursor);
+        } else if (cursor.next == null) { // TODO Adds an element in an incorrect order.
+            Node<V> newNode = new Node<>(null, value, cursor);
             newNode.prev.next = newNode;
             first = newNode;
-        } else {
-            Node<V> newNode = new Node<V>(cursor.next, (V) value, cursor);
+        } else { // TODO Adds an element in an incorrect order.
+            Node<V> newNode = new Node<V>(cursor.next, value, cursor);
             newNode.next.prev = newNode;
             cursor.prev = newNode;
         }
         size++;
-
-
     }
 
     @Override
@@ -65,10 +63,10 @@ public class DoubleLinkedList<V> implements List, Iterable {
     }
 
     @Override
-    public V set(Object value, int index) {
+    public V set(V value, int index) {
         Node<V> cursor = getNode(index);
         V prevValue = cursor.value;
-        cursor.value = (V) value;
+        cursor.value = value;
         return prevValue;
     }
 
@@ -89,7 +87,7 @@ public class DoubleLinkedList<V> implements List, Iterable {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(V value) {
         Node<V> cursor = first;
         for (int i = 0; i < size; i++) {
             if (Objects.equals(cursor.value, value)) {
@@ -101,7 +99,7 @@ public class DoubleLinkedList<V> implements List, Iterable {
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(V value) {
         Node<V> cursor = first;
         for (int i = 0; i < size; i++) {
             if (Objects.equals(cursor.value, value)) {
@@ -113,7 +111,7 @@ public class DoubleLinkedList<V> implements List, Iterable {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(V value) {
         Node<V> cursor = last;
         for (int i = 0; i < size; i++) {
             if (Objects.equals(cursor.value, value)) {
@@ -137,7 +135,7 @@ public class DoubleLinkedList<V> implements List, Iterable {
 
     @Override
     public Iterator<V> iterator() {
-        return new Iterator() {
+        return new Iterator<V>() {
             Node<V> cursor = first;
 
             @Override
@@ -146,7 +144,7 @@ public class DoubleLinkedList<V> implements List, Iterable {
             }
 
             @Override
-            public Object next() {
+            public V next() {
                 cursor = cursor.next;
                 return cursor.value;
             }

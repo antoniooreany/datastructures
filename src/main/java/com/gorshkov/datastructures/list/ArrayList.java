@@ -4,8 +4,9 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class ArrayList<V> implements List, Iterable {
+public class ArrayList<V> implements List<V>, Iterable<V> {
     private final int INITIAL_CAPACITY = 4;
+    private final double LOAD_FACTOR = 1.5;
 
     private V[] values;
     private int capacity = INITIAL_CAPACITY;
@@ -16,23 +17,29 @@ public class ArrayList<V> implements List, Iterable {
     }
 
     @Override
-    public void add(Object value) {
-        if (size >= capacity) {
-            capacity *= 2;
-            Object[] tmp = values;
-            values = (V[]) new Object[capacity];
-            System.arraycopy(tmp, 0, values, 0, capacity / 2);
+    public void add(V value) {
+//        if (size >= capacity) {
+//            capacity *= LOAD_FACTOR;
+//            Object[] tmp = values;
+//            values = (V[]) new Object[capacity];
+//            System.arraycopy(tmp, 0, values, 0, capacity / 2);
+//        }
+//        values[size] = value;
+//        size++;
+
+        if (values.length >= size) {
+            increaseSize();
         }
-        values[size] = (V) value;
+        values[size] = value;
         size++;
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(V value, int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
-            values[index] = (V) value;
+            values[index] = value;
         }
     }
 
@@ -47,6 +54,7 @@ public class ArrayList<V> implements List, Iterable {
             System.arraycopy(tmp, index + 1, values, index, size - 1);
             values[size] = null;
         }
+        size--;
         return result;
     }
 
@@ -58,12 +66,12 @@ public class ArrayList<V> implements List, Iterable {
     }
 
     @Override
-    public V set(Object value, int index) {
+    public V set(V value, int index) {
         V previousValue = values[index];
         if (index < 0 || index > size - 1) {
             throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
         } else {
-            values[index] = (V) value;
+            values[index] = value;
             return previousValue;
         }
     }
@@ -71,6 +79,7 @@ public class ArrayList<V> implements List, Iterable {
     @Override
     public void clear() {
         values = (V[]) new Object[capacity];
+        size = 0;
     }
 
     @Override
@@ -84,7 +93,7 @@ public class ArrayList<V> implements List, Iterable {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(V value) {
         for (int i = 0; i < size; i++) {
             if (Objects.equals(values[i], value)) {
                 return true;
@@ -94,7 +103,7 @@ public class ArrayList<V> implements List, Iterable {
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(V value) {
         for (int i = 0; i < size; i++) {
             if (Objects.equals(values[i], value)) {
                 return i;
@@ -104,7 +113,7 @@ public class ArrayList<V> implements List, Iterable {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(V value) {
         for (int i = size - 1; i >= 0; i--) {
             if (Objects.equals(values[i], value)) {
                 return i;
@@ -123,26 +132,32 @@ public class ArrayList<V> implements List, Iterable {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<V> iterator() {
 
-        return new Iterator() {
-            static int index;
-            final V cursor = values[0];
+        return new Iterator<>() {
+            int index;
 
             @Override
             public boolean hasNext() {
-                return next() != null;
+                return index < size;
             }
 
             @Override
             public V next() {
-                return values[index++];
+                return values[++index];
             }
 
             @Override
             public void remove() {
-                index++;
+                ArrayList.this.remove(index - 1);
             }
         };
+    }
+
+    private void increaseSize() {
+        V[] tmpValues = (V[]) new Object[(int) (values.length * LOAD_FACTOR)];
+        System.arraycopy(values, 0, tmpValues, 0, size);
+        values = tmpValues;
+
     }
 }
