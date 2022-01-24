@@ -27,11 +27,18 @@ public class ArrayList<V> implements List<V> {
 
     @Override
     public void add(V value, int index) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("index " + index + " is out of bounds.");
-        } else {
-            values[index] = value;
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is less than zero");
         }
+        if (index >= size - 1) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is is larger than size");
+        }
+        if (values.length >= size) {
+            increaseSize();
+        }
+        System.arraycopy(values, index, values, index + 1, size - index);
+        values[index] = value;
+        size++;
     }
 
     @Override

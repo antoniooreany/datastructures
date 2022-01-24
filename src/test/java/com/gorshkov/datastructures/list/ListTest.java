@@ -35,10 +35,14 @@ public abstract class ListTest<V> {
     void testAdd() {
         list.add((V) "Two", 1);
         assertEquals("Two", list.get(1));
+
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> list.add((V) "minus one", -1));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> list.add((V) "plus six", 6));
     }
 
     @Test
     void remove() {
+        assertEquals(5, list.size());
         list.remove(1);
         assertEquals(4, list.size());
         assertEquals("three", list.get(1));
