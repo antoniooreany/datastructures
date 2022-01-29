@@ -20,22 +20,24 @@ public class HashMap<K, V> implements Map<K, V> {
     @Override
     public V put(K key, V value) {
         V previousValue = null;
-        int bucketNumber = key.hashCode() % NUM_BUCKETS;
+        Entry<K, V> newEntry = new Entry<>(key, value);
+        int bucketNumber = getBucketNumber(key);
         for (Entry<K, V> entry : buckets[bucketNumber]) {
             if (Objects.equals(entry.key, key)) {
                 previousValue = entry.value;
+                entry.value = value;
+//                buckets[bucketNumber].remove(entry);
             }
         }
-        Entry<K, V> entry = new Entry<>(key, value);
-        buckets[bucketNumber].add(entry);
-        entrySet.add(entry);
+        buckets[bucketNumber].add(newEntry);
+        entrySet.add(newEntry);
         size++;
         return previousValue;
     }
 
     @Override
     public V get(K key) {
-        int bucketNumber = key.hashCode() % NUM_BUCKETS;
+        int bucketNumber = getBucketNumber(key);
         for (Entry<K, V> entry : buckets[bucketNumber]) {
             if (Objects.equals(entry.key, key)) {
                 return entry.value;
@@ -46,7 +48,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(K key) {
-        int bucketNumber = key.hashCode() % NUM_BUCKETS;
+        int bucketNumber = getBucketNumber(key);
         for (Entry<K, V> entry : buckets[bucketNumber]) {
             if (Objects.equals(entry.key, key)) {
                 return true;
@@ -67,6 +69,40 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public Iterator<Entry<K, V>> iterator() {
-        return entrySet.iterator();
+//        return entrySet.iterator();
+        return new Iterator<Entry<K, V>>() {
+            Iterator<Entry<K, V>> bucketIterator = buckets[0].iterator();
+            int currentBucketIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                if (!bucketIterator.hasNext()) {
+                    if (currentBucketIndex >= NUM_BUCKETS) {
+                        return false;
+                    } else {
+                        return buckets[currentBucketIndex + 1].iterator().hasNext();
+                    }
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public Entry<K, V> next() {
+                if (!bucketIterator.hasNext()) {
+                    if (currentBucketIndex >= NUM_BUCKETS) {
+                        return null;
+                    } else {
+                        return buckets[++currentBucketIndex].iterator().next();
+                    }
+                } else {
+                    return bucketIterator.next();
+                }
+            }
+        };
+    }
+
+    private int getBucketNumber(K key) {
+        return Math.abs(key.hashCode() % NUM_BUCKETS);
     }
 }

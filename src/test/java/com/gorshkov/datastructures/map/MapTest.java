@@ -9,7 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MapTest {
 
-    private static final HashMap<Integer, String> map = new HashMap<>();
+    private final HashMap<Integer, String> map = new HashMap<>();
+
     private static final int SIZE = 5;
 
     @BeforeEach
@@ -56,16 +57,39 @@ class MapTest {
     @Test
     void entrySet() {
         Iterator<Entry<Integer, String>> iterator = map.entrySet().iterator();
-//        for (int i = 0; i < map.size(); i++) {
-//            System.out.println(iterator.next().value);
-//        }
+
+        assertEquals("_0", iterator.next().value);
+        assertEquals("_3", iterator.next().value);
+        assertEquals("_1", iterator.next().value);
+        assertEquals("_4", iterator.next().value);
+        assertEquals("_2", iterator.next().value);
     }
 
     @Test
-    void iterator() {
+    void iteratorHasNext() {
         Iterator<Entry<Integer, String>> iterator = map.entrySet().iterator();
-//        for (int i = 0; i < map.size(); i++) {
-//            System.out.println(iterator.next().value);
-//        }
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+
+        assertFalse(iterator.hasNext());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void iteratorNext() {
+        Iterator<Entry<Integer, String>> iterator = map.iterator();
+
+        assertEquals("_0", iterator.next().value);
+        assertEquals("_1", iterator.next().value);
+        assertEquals("_2", iterator.next().value);
+        assertEquals("_3", iterator.next().value);
+        assertEquals("_4", iterator.next().value);
+
+        assertNull(iterator.next());
+        assertNull(iterator.next());
+
     }
 }
