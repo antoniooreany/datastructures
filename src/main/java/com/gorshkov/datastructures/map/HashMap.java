@@ -5,6 +5,8 @@ import java.util.*;
 public class HashMap<K, V> implements Map<K, V> {
 
     private static final int NUM_BUCKETS = 10;
+    private static final double LOAD_FACTOR = 0.75;
+    private static final double GROWTH_FACTOR = 2.0;
 
     private int size = 0;
     private final Set<Entry<K, V>> entrySet = new HashSet<>();
@@ -30,9 +32,18 @@ public class HashMap<K, V> implements Map<K, V> {
             }
         }
         buckets[bucketNumber].add(newEntry);
+        if(loaded()) resize();
         entrySet.add(newEntry);
         size++;
         return previousValue;
+    }
+
+    private boolean loaded() {
+        return false;
+    }
+
+    private void resize() {
+
     }
 
     @Override
@@ -70,7 +81,7 @@ public class HashMap<K, V> implements Map<K, V> {
     @Override
     public Iterator<Entry<K, V>> iterator() {
 //        return entrySet.iterator();
-        return new Iterator<Entry<K, V>>() {
+        return new Iterator<>() {
             Iterator<Entry<K, V>> bucketIterator = buckets[0].iterator();
             int currentBucketIndex = 0;
 
@@ -80,7 +91,8 @@ public class HashMap<K, V> implements Map<K, V> {
                     if (currentBucketIndex >= NUM_BUCKETS) {
                         return false;
                     } else {
-                        return buckets[currentBucketIndex + 1].iterator().hasNext();
+                        bucketIterator = buckets[currentBucketIndex + 1].iterator();
+                        return bucketIterator.hasNext();
                     }
                 } else {
                     return true;
@@ -93,7 +105,8 @@ public class HashMap<K, V> implements Map<K, V> {
                     if (currentBucketIndex >= NUM_BUCKETS) {
                         return null;
                     } else {
-                        return buckets[++currentBucketIndex].iterator().next();
+                        currentBucketIndex++;
+                        return buckets[currentBucketIndex].iterator().next();
                     }
                 } else {
                     return bucketIterator.next();
